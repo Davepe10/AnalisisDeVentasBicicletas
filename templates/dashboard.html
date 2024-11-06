@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/estilo.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Dashboard de Análisis de Ventas</title>
+</head>
+<body>
+    <header>
+        <h1>Dashboard de Ventas de Bicicletas</h1>
+        <button id="toggle-theme"><i class="fa fa-lightbulb-o"></i> Cambiar Tema</button>
+    </header>
+    <main>
+        <h2>Gráficos de Análisis</h2>
+        <div class="grid">
+            <div class="grafico-container">
+                <h3>Modelo más vendido</h3>
+                <div class="grafico">
+                    <img src="/static/img/cantidad_por_modelo.png" alt="Gráfico de Modelo más vendido">
+                </div>
+                <p>Análisis sobre los modelos de bicicletas que más se han vendido...</p>
+            </div>
+            <div class="grafico-container">
+                <h3>Método de Pago Favorito</h3>
+                <div class="grafico">
+                    <img src="/static/img/metodo_pago_favorito.png" alt="Gráfico de Método de Pago Favorito">
+                </div>
+                <p>Análisis sobre los métodos de pago más utilizados por los clientes...</p>
+            </div>
+            <div class="grafico-container">
+                <h3>Ventas por Ciudad</h3>
+                <div class="grafico">
+                    <img src="/static/img/ventas_por_ciudad.png" alt="Gráfico de Ventas por Ciudad">
+                </div>
+                <p>Análisis sobre las ventas según la ubicación de las tiendas...</p>
+            </div>
+            <div class="grafico-container">
+                <h3>Edad vs Modelo de Bicicleta</h3>
+                <div class="grafico">
+                    <img src="/static/img/edad_vs_modelo.png" alt="Gráfico de Edad vs Modelo de Bicicleta">
+                </div>
+                <p>Análisis sobre la relación entre la edad de los compradores y los modelos de bicicletas...</p>
+            </div>
+            <div class="grafico-container">
+                <h3>Precio por Modelo</h3>
+                <div class="grafico">
+                    <img src="/static/img/precio_por_modelo.png" alt="Gráfico de Precio por Modelo">
+                </div>
+                <p>Análisis sobre cómo el precio influye en la compra de diferentes modelos...</p>
+            </div>
+            <div class="grafico-container">
+                <h3>Distribución de Edad de Compradores</h3>
+                <div class="grafico">
+                    <img src="/static/img/distribucion_edad.png" alt="Gráfico de Distribución de Edad">
+                </div>
+                <p>Análisis sobre la distribución de edad de los compradores...</p>
+            </div>
+            <div class="grafico-container">
+                <h3>Ubicación por Modelo</h3>
+                <div class="grafico">
+                    <img src="/static/img/ubicacion_por_modelo.png" alt="Gráfico de Ubicación por Modelo">
+                </div>
+                <p>Análisis sobre la ubicación de los modelos más vendidos...</p>
+            </div>
+            <div class="grafico-container">
+                <h3>Método de Pago por Edad</h3>
+                <div class="grafico">
+                    <img src="/static/img/metodo_pago_por_edad.png" alt="Gráfico de Método de Pago por Edad">
+                </div>
+                <p>Análisis sobre la relación entre la edad de los compradores y el método de pago...</p>
+            </div>
+        </div>
+        
+        <div class="resumen">
+            <h2>Resumen de Análisis</h2>
+            <div class="resumen-grid">
+                <div class="resumen-item">
+                    <h3>Total de Ventas por Ciudad</h3>
+                    <ul>
+                        {% if analisis['ventas_por_ciudad'] %}
+                            {% for venta in analisis['ventas_por_ciudad'] %}
+                                <li>{{ venta['_id'] }}: {{ venta['total_ventas'] }}</li>
+                            {% endfor %}
+                        {% else %}
+                            <li>No se encontraron datos de ventas por ciudad.</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="resumen-item">
+                    <h3>Edad que más compra bicicletas</h3>
+                    {% if analisis['edad_mas_compras'] %}
+                        <p>Edad: {{ analisis['edad_mas_compras'][0]['_id'] }}, Compras: {{ analisis['edad_mas_compras'][0]['total_compras'] }}</p>
+                    {% else %}
+                        <p>No se encontraron datos de edad más compradora.</p>
+                    {% endif %}
+                </div>
+                <div class="resumen-item">
+                    <h3>Modelo más vendido</h3>
+                    {% if analisis['modelo_mas_vendido'] %}
+                        <p>Modelo: {{ analisis['modelo_mas_vendido'][0]['_id'] }}, Total: {{ analisis['modelo_mas_vendido'][0]['total_modelos'] }}</p>
+                    {% else %}
+                        <p>No se encontraron datos del modelo más vendido.</p>
+                    {% endif %}
+                </div>
+                <div class="resumen-item">
+                    <h3>Influencia del Precio en la Compra</h3>
+                    <ul>
+                        {% if analisis['influencia_precio'] %}
+                            {% for influencia in analisis['influencia_precio'] %}
+                                <li>Precio: {{ influencia['_id'] }}, Cantidad vendida: {{ influencia['cantidad_vendida'] }}</li>
+                            {% endfor %}
+                        {% else %}
+                            <li>No se encontraron datos sobre la influencia del precio.</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="resumen-item">
+                    <h3>Método de pago favorito</h3>
+                    {% if analisis['metodo_pago_favorito'] %}
+                        <p>Método: {{ analisis['metodo_pago_favorito'][0]['_id'] }}, Total: {{ analisis['metodo_pago_favorito'][0]['total'] }}</p>
+                    {% else %}
+                        <p>No se encontraron datos del método de pago favorito.</p>
+                    {% endif %}
+                </div>
+                <div class="resumen-item">
+                    <h3>Promedio de Edad por Género</h3>
+                    <ul>
+                        <li>Femenino: {{ analisis['promedio_edad_genero'][0]['edad_promedio'] | round(1) }}</li>
+                        <li>Masculino: {{ analisis['promedio_edad_genero'][1]['edad_promedio'] | round(1) }}</li>
+                    </ul>
+                </div>
+                <div class="resumen-item">
+                    <h3>Modelos más vendidos por Localidad</h3>
+                    <ul>
+                        {% if analisis['modelo_por_localidad'] %}
+                            {% for modelo in analisis['modelo_por_localidad'] %}
+                                <li>{{ modelo['_id']['Store_Location'] }}: {{ modelo['_id']['Bike_Model'] }}, Total: {{ modelo['total_ventas'] }}</li>
+                            {% endfor %}
+                        {% else %}
+                            <li>No se encontraron datos de modelos por localidad.</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="resumen-item">
+                    <h3>Método de Pago por Localidad</h3>
+                    <ul>
+                        {% if analisis['metodo_pago_por_localidad'] %}
+                            {% for metodo in analisis['metodo_pago_por_localidad'] %}
+                                <li>{{ metodo['_id']['Store_Location'] }}: {{ metodo['_id']['Payment_Method'] }}, Total: {{ metodo['total'] }}</li>
+                            {% endfor %}
+                        {% else %}
+                            <li>No se encontraron datos de método de pago por localidad.</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="resumen-item">
+                    <h3>Método de Pago por Edad</h3>
+                    <ul>
+                        {% if analisis['metodo_pago_por_edad'] %}
+                            {% for metodo in analisis['metodo_pago_por_edad'] %}
+                                <li>Edad {{ metodo['_id']['Customer_Age'] }}: {{ metodo['_id']['Payment_Method'] }}, Total: {{ metodo['total'] }}</li>
+                            {% endfor %}
+                        {% else %}
+                            <li>No se encontraron datos de método de pago por edad.</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Análisis de Ventas de Bicicletas</p>
+    </footer>
+
+    <script>
+        // Cambiar tema
+        document.getElementById('toggle-theme').onclick = function() {
+            document.body.classList.toggle('dark-theme');
+        };
+    </script>
+</body>
+</html>
